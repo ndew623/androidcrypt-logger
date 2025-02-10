@@ -1,5 +1,9 @@
 # Change Log
 
+v1.0.2
+
+- Updated to the latest Simple Test Framework (STF)
+
 v1.0.1
 
 - Changed NullOStream so that NullBuffer is a member and changed logger.cpp
