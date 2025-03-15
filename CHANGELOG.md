@@ -1,5 +1,9 @@
 # Change Log
 
+v1.0.3
+
+- Changes required to build on OpenBSD
+
 v1.0.2
 
 - Updated to the latest Simple Test Framework (STF)
