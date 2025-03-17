@@ -134,7 +134,7 @@ int LogLevelToSyslog(LogLevel log_level)
 {
     int priority{};
 
-#ifdef  SYSLOG_SUPPORTED
+#ifdef SYSLOG_SUPPORTED
     switch (log_level)
     {
         case LogLevel::Critical:
