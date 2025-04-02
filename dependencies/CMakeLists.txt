@@ -29,9 +29,7 @@ FetchContent_Declare(conio
     GIT_SHALLOW    true)
 
 # If not installing logger, turn off installation for dependencies
-if(NOT logger_INSTALL)
-    set(conio_INSTALL OFF)
-endif()
+set(conio_INSTALL ${logger_INSTALL})
 
 # Make dependencies available
 FetchContent_MakeAvailable(conio)
