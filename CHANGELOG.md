@@ -1,5 +1,11 @@
 # Change Log
 
+v1.0.4
+
+- Made compiler warnings stricter
+- Addressed warnings
+- Updated dependencies
+
 v1.0.3
 
 - Changes required to build on OpenBSD

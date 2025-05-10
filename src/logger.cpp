@@ -130,7 +130,7 @@ std::string LogLevelString(LogLevel log_level)
  *  Comments:
  *      None.
  */
-int LogLevelToSyslog(LogLevel log_level)
+int LogLevelToSyslog([[maybe_unused]] LogLevel log_level)
 {
     int priority{};
 
@@ -254,7 +254,8 @@ Logger::Logger(LoggerPointer parent_logger,
  *  Comments:
  *      None.
  */
-Logger::Logger(const std::string &identifier, LogLevel minimum_log_level) :
+Logger::Logger([[maybe_unused]] const std::string &identifier,
+               LogLevel minimum_log_level) :
     Logger({}, {}, minimum_log_level, LogFacility::Syslog, std::clog)
 {
 #ifdef SYSLOG_SUPPORTED
