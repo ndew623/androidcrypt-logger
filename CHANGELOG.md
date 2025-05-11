@@ -1,10 +1,15 @@
 # Change Log
 
-v1.0.4
+v1.0.5
 
 - Made compiler warnings stricter
 - Addressed warnings
 - Updated dependencies
+
+v1.0.4
+
+- Cosmetic changes
+- CMake changes
 
 v1.0.3
 
