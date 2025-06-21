@@ -62,8 +62,6 @@ LoggerPointer CreateNullLogger()
     return std::make_shared<Logger>(Null_Stream);
 }
 
-} // namespace
-
 /*
  *  LogLevelString()
  *
@@ -166,6 +164,8 @@ int LogLevelToSyslog([[maybe_unused]] LogLevel log_level)
 
     return priority;
 }
+
+} // namespace
 
 /*
  *  Logger::Logger()
@@ -564,7 +564,8 @@ void Logger::EmitLogMessage(LogLevel log_level,
  *      None.
  *
  *  Returns:
- *      A timestamp string to apply to logged messages.
+ *      A timestamp string to apply to logged messages or empty string if there
+ *      was an error.
  *
  *  Comments:
  *      This function uses std::chrono::system_clock, which is subject to
@@ -606,9 +607,9 @@ std::string Logger::GetCurrentTimestamp() const
 
     // Convert the time_t value to the local time
 #ifdef _WIN32
-    localtime_s(&local_time, &time);
+    if (localtime_s(&local_time, &time) != 0) return {};
 #else
-    localtime_r(&time, &local_time);
+    if (localtime_r(&time, &local_time) == nullptr) return {};
 #endif
 
     // Output the timestamp string
