@@ -1,7 +1,7 @@
 /*
  *  logger.cpp
  *
- *  Copyright (C) 2024
+ *  Copyright (C) 2024, 2025
  *  Terrapane Corporation
  *  All Rights Reserved
  *
@@ -20,7 +20,8 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__APPLE__)
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
+    defined(__APPLE__)
 #include <syslog.h>
 #define SYSLOG_SUPPORTED 1
 #else
@@ -177,7 +178,7 @@ int LogLevelToSyslog([[maybe_unused]] LogLevel log_level)
  *  Parameters:
  *      parent_logger [in]
  *          A shared pointer to the parent logger for this child Logger object.
- *          This may be a nullptr, indicating there is no parent Logger.
+ *          This must NOT be a nullptr value.
  *
  *      component [in]
  *          A short (3 or 4 characters recommended) string that identifies the
@@ -324,8 +325,9 @@ Logger::Logger(std::ostream &stream, LogLevel minimum_log_level) :
  *  Logger::Logger()
  *
  *  Description:
- *      Constructor for the Logger object that will direct output to the
- *      specified stream.  This constructor will create a child Logger object.
+ *      This constructor will create a child Logger object for the given
+ *      parent Logger object.  If the parent Logger object is a nullptr,
+ *      this constructor will create a parent Logger that suppresses output.
  *
  *  Parameters:
  *      parent_logger [in]
@@ -349,14 +351,13 @@ Logger::Logger(std::ostream &stream, LogLevel minimum_log_level) :
  *  Comments:
  *      None.
  */
-Logger::Logger(const LoggerPointer &parent_logger,
+Logger::Logger(LoggerPointer parent_logger,
                const std::string &component,
                LogLevel minimum_log_level) :
-    Logger(parent_logger ? parent_logger : CreateNullLogger(),
+    Logger(parent_logger ? std::move(parent_logger) : CreateNullLogger(),
            component,
            minimum_log_level,
-           parent_logger ? parent_logger->GetLogFacility() :
-                           LogFacility::Stream,
+           LogFacility::Inherit,
            std::clog)
 {
 }
@@ -485,7 +486,9 @@ void Logger::HandleLogMessage(LogLevel log_level,
  *      Nothing.
  *
  *  Comments:
- *      None.
+ *      This function is called only by the root Logger object in the heirarchy
+ *      of parent/child Logger objects.  As such, it can safely rely on
+ *      log_facility being set to something other than "Inherit".
  */
 void Logger::EmitLogMessage(LogLevel log_level,
                             const std::string &message) const

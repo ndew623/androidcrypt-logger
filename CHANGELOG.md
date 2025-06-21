@@ -1,5 +1,13 @@
 # Change Log
 
+v1.0.6
+
+- Added support for OpenBSD
+- Changed how shared pointers to parent logging objects are passed and stored
+- Changed the GetLogFacility() function to return the facility of the root
+  Logger object
+- 
+
 v1.0.5
 
 - Made compiler warnings stricter
