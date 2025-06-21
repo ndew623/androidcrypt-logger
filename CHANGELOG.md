@@ -6,7 +6,7 @@ v1.0.6
 - Changed how shared pointers to parent logging objects are passed and stored
 - Changed the GetLogFacility() function to return the facility of the root
   Logger object
-- 
+- Return empty string if GetCurrentTimestamp() produces an error
 
 v1.0.5
 
