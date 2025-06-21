@@ -20,12 +20,8 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
-    defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 #include <syslog.h>
-#define SYSLOG_SUPPORTED 1
-#else
-#undef SYSLOG_SUPPORTED
 #endif
 #include <terra/logger/logger.h>
 #include <terra/logger/null_ostream.h>
@@ -112,6 +108,8 @@ std::string LogLevelString(LogLevel log_level)
     return log_level_string;
 }
 
+#if defined(__unix__) || defined(__APPLE__)
+
 /*
  *  LogLevelToSyslog()
  *
@@ -129,11 +127,10 @@ std::string LogLevelString(LogLevel log_level)
  *  Comments:
  *      None.
  */
-int LogLevelToSyslog([[maybe_unused]] LogLevel log_level)
+int LogLevelToSyslog(LogLevel log_level)
 {
     int priority{};
 
-#ifdef SYSLOG_SUPPORTED
     switch (log_level)
     {
         case LogLevel::Critical:
@@ -160,10 +157,11 @@ int LogLevelToSyslog([[maybe_unused]] LogLevel log_level)
             priority = LOG_INFO;
             break;
     }
-#endif
 
     return priority;
 }
+
+#endif
 
 } // namespace
 
@@ -259,7 +257,7 @@ Logger::Logger([[maybe_unused]] const std::string &identifier,
                LogLevel minimum_log_level) :
     Logger({}, {}, minimum_log_level, LogFacility::Syslog, std::clog)
 {
-#ifdef SYSLOG_SUPPORTED
+#if defined(__unix__) || defined(__APPLE__)
     // Open syslog for logging
     if (identifier.empty())
     {
@@ -379,7 +377,7 @@ Logger::Logger(LoggerPointer parent_logger,
  */
 Logger::~Logger()
 {
-#ifdef SYSLOG_SUPPORTED
+#if defined(__unix__) || defined(__APPLE__)
     // Only the parent logger needs to take action
     if ((!parent_logger) && (log_facility == LogFacility::Syslog)) closelog();
 #endif
@@ -498,7 +496,7 @@ void Logger::EmitLogMessage(LogLevel log_level,
     // Emitting to syslog?
     if (log_facility == LogFacility::Syslog)
     {
-#ifdef SYSLOG_SUPPORTED
+#if defined(__unix__) || defined(__APPLE__)
         syslog(LogLevelToSyslog(log_level), "%s", message.c_str());
 #endif
         return;
