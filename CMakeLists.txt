@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 # Define the Logger project
 project(logger
-        VERSION 1.0.6.0
+        VERSION 1.0.7.0
         DESCRIPTION "Logger Library"
         LANGUAGES CXX)
 
@@ -24,10 +24,11 @@ option(logger_INSTALL "Install the Logger Library" ON)
 # Determine whether clang-tidy will be performed
 option(logger_CLANG_TIDY "Use clang-tidy to perform linting during build" OFF)
 
+# Ensure testing is enabled to surface tests in dependencies
+include(CTest)
+
 add_subdirectory(dependencies)
 add_subdirectory(src)
-
-include(CTest)
 
 if(logger_BUILD_SAMPLE)
     add_subdirectory(sample)

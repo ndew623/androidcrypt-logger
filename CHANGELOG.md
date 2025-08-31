@@ -1,5 +1,10 @@
 # Change Log
 
+v1.0.7
+
+- Updated dependencies
+- CMake changes to support downstream unit testing
+
 v1.0.6
 
 - Added support for OpenBSD and other UNIX-like systems
