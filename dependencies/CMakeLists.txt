@@ -23,13 +23,13 @@ if(logger_BUILD_TESTS)
 endif()
 
 # Fetch the console I/O library
-FetchContent_Declare(conio
-    GIT_REPOSITORY ${TERRAPANE_SOURCE_URI}/conio.git
-    GIT_TAG        v1.0.4
-    GIT_SHALLOW    true)
+#FetchContent_Declare(conio
+#    GIT_REPOSITORY ${TERRAPANE_SOURCE_URI}/conio.git
+#    GIT_TAG        v1.0.4
+#    GIT_SHALLOW    true)
 
 # If not installing logger, turn off installation for dependencies
-set(conio_INSTALL ${logger_INSTALL})
+#set(conio_INSTALL ${logger_INSTALL})
 
 # Make dependencies available
-FetchContent_MakeAvailable(conio)
+#FetchContent_MakeAvailable(conio)
