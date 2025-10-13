@@ -1,4 +1,4 @@
-# Create the test excutable
+# Create the test executable
 add_executable(logger_demo logger_demo.cpp)
 
 # Link to the required libraries
