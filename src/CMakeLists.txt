@@ -1,13 +1,15 @@
+# Include standard installation directory variables
+include(GNUInstallDirs)
+
 # Create the library
 add_library(logger STATIC logger.cpp)
 add_library(Terra::logger ALIAS logger)
 
 # Make project include directory available to external projects
 target_include_directories(logger
-    PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     PUBLIC
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 # Specify the C++ standard to observe
 set_target_properties(logger
@@ -42,7 +44,6 @@ endif()
 
 # Install target and associated include files
 if(logger_INSTALL)
-    include(GNUInstallDirs)
     install(TARGETS logger EXPORT loggerTargets ARCHIVE)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ TYPE INCLUDE)
     install(EXPORT loggerTargets
